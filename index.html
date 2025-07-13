@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>0xLemonz - Games & AI</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
   <style>
     :root {
       --lemon-yellow: #f9f871;
@@ -15,7 +17,6 @@
       --text-color: #333;
       --card-bg: #fff;
     }
-
     body {
       background: linear-gradient(135deg, var(--background-start), var(--background-end));
       color: var(--text-color);
@@ -25,8 +26,6 @@
       -webkit-overflow-scrolling: touch;
       transition: background-color 0.5s ease, color 0.5s ease;
     }
-
-    
     body.dark {
       --lemon-yellow: #b3bc1a;
       --lemon-dark: #a2ac14;
@@ -38,14 +37,12 @@
       background: linear-gradient(135deg, var(--background-start), var(--background-end));
       color: var(--text-color);
     }
-
     * {
       box-sizing: border-box;
       font-family: 'Poppins', sans-serif;
       margin: 0;
       padding: 0;
     }
-
     header {
       background-color: var(--lemon-yellow);
       padding: 1rem 2rem;
@@ -56,15 +53,12 @@
       top: 0;
       z-index: 1000;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      flex-wrap: wrap;
       transition: background-color 0.5s ease;
     }
-
     body.dark header {
       background-color: var(--lemon-dark);
       box-shadow: 0 2px 10px rgba(0,0,0,0.6);
     }
-
     .logo {
       font-size: 2rem;
       font-weight: 700;
@@ -74,74 +68,77 @@
       margin-left: 5px;
       transition: color 0.5s ease;
     }
-
     body.dark .logo {
       color: var(--lemon-yellow);
     }
-
     .logo span {
       margin-left: 0.5rem;
       font-size: 2.5rem;
       animation: wiggle 2s infinite ease-in-out;
     }
-
     @keyframes wiggle {
       0%, 100% { transform: rotate(0deg); }
       25% { transform: rotate(-10deg); }
       75% { transform: rotate(10deg); }
     }
-
     nav {
       display: flex;
-      gap: 1.5rem;
+      gap: 1.4rem;
+      align-items: center;
     }
-
-    nav a {
+    nav a, nav button {
       text-decoration: none;
       color: var(--lemon-dark);
       font-weight: 600;
       font-size: 1rem;
+      background: none;
+      border: none;
+      cursor: pointer;
       position: relative;
       transition: all 0.3s ease;
+      padding: 0.25em 0.6em;
+      border-radius: 10px;
+      z-index: 1;
     }
-
-    body.dark nav a {
+    body.dark nav a, body.dark nav button {
       color: var(--lemon-yellow);
     }
-
-    nav a::after {
-      content: "";
-      position: absolute;
-      width: 0%;
-      height: 2px;
-      background-color: var(--lemon-green);
-      bottom: -4px;
-      left: 0;
-      transition: width 0.3s ease;
-    }
-
-    nav a:hover {
+    nav a:hover, nav button:hover, nav a.active, nav button.active {
       color: var(--lemon-green);
-      transform: translateY(-2px);
+      background: rgba(249,248,113,0.2);
+      animation: menuWiggle 0.4s cubic-bezier(.7,2,.5,.9);
     }
-
-    body.dark nav a:hover {
+    body.dark nav a:hover, body.dark nav button:hover, body.dark nav a.active, body.dark nav button.active {
       color: var(--lemon-yellow);
+      background: rgba(179,188,26,0.12);
       filter: brightness(1.2);
+      animation: menuWiggle 0.4s cubic-bezier(.7,2,.5,.9);
     }
-
-    nav a:hover::after {
-      width: 100%;
+    @keyframes menuWiggle {
+      0% { transform: scale(1) rotate(0deg); }
+      26% { transform: scale(1.08) rotate(-7deg);}
+      67% { transform: scale(1.05) rotate(7deg);}
+      100% { transform: scale(1) rotate(0deg);}
     }
-
     .hamburger {
       display: none;
       flex-direction: column;
       cursor: pointer;
       gap: 5px;
       z-index: 1100;
+      width: 36px;
+      height: 36px;
+      justify-content: center;
+      align-items: center;
+      margin-left: 10px;
+      border-radius: 50%;
+      background: rgba(249,248,113,0.18);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      transition: background 0.3s;
     }
-
+    .hamburger:hover {
+      background: var(--lemon-yellow);
+    }
     .hamburger div {
       width: 25px;
       height: 3px;
@@ -149,17 +146,289 @@
       border-radius: 2px;
       transition: background-color 0.5s ease;
     }
-
     body.dark .hamburger div {
       background: var(--lemon-yellow);
     }
-
+    /* Mobile nav - dropdown style from top */
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: auto;
+      min-height: 100vh;
+      background: var(--card-bg);
+      box-shadow: 0 10px 30px 0 rgba(0,0,0,0.17);
+      z-index: 2000;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding: 88px 0 3rem 0;
+      border-bottom-left-radius: 24px;
+      border-bottom-right-radius: 24px;
+      animation: dropDownMenu 0.38s cubic-bezier(.7,2,.5,.9);
+    }
+    body.dark .mobile-nav {
+      background: var(--background-end);
+      box-shadow: 0 10px 30px 0 rgba(0,0,0,0.4);
+    }
+    .mobile-nav.show {
+      display: flex;
+    }
+    @keyframes dropDownMenu {
+      0% {transform: translateY(-100vh);}
+      100% {transform: translateY(0);}
+    }
+    .mobile-nav .close-btn {
+      position: absolute;
+      top: 18px;
+      right: 20px;
+      font-size: 2.2rem;
+      background: none;
+      border: none;
+      color: var(--lemon-green);
+      cursor: pointer;
+      transition: color 0.2s;
+      z-index: 10;
+    }
+    body.dark .mobile-nav .close-btn {
+      color: var(--lemon-yellow);
+    }
+    .mobile-nav .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 0.7em;
+      color: var(--lemon-dark);
+      font-weight: 600;
+      font-size: 1.15rem;
+      text-decoration: none;
+      padding: 0.9em 2.2em 0.9em 2.2em;
+      background: none;
+      border: none;
+      border-bottom: 1px solid #edf2c3;
+      border-radius: 0;
+      transition: color 0.3s, background 0.3s;
+      cursor: pointer;
+      text-align: left;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+    body.dark .mobile-nav .menu-item {
+      color: var(--lemon-yellow);
+      border-bottom: 1px solid #333;
+    }
+    .mobile-nav .menu-item:last-child {
+      border-bottom: none;
+    }
+    .mobile-nav .menu-item i {
+      font-size: 1.3em;
+      margin-right: 6px;
+      opacity: 0.7;
+    }
+    .mobile-nav .menu-item:hover, .mobile-nav .menu-item.active {
+      background: rgba(249,248,113,0.12);
+      color: var(--lemon-green);
+      animation: menuWiggle 0.4s cubic-bezier(.7,2,.5,.9);
+    }
+    body.dark .mobile-nav .menu-item:hover, body.dark .mobile-nav .menu-item.active {
+      background: rgba(179,188,26,0.09);
+      color: var(--lemon-yellow);
+      animation: menuWiggle 0.4s cubic-bezier(.7,2,.5,.9);
+    }
+    /* Modal styles */
+    .modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.23);
+      z-index: 2500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .modal.active {
+      visibility: visible;
+      opacity: 1;
+    }
+    .modal-content {
+      background: var(--card-bg);
+      color: var(--text-color);
+      border-radius: 24px;
+      padding: 2rem 1.6rem 1.5rem 1.6rem;
+      min-width: 300px;
+      max-width: 380px;
+      width: 100%;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+      position: relative;
+      text-align: center;
+      animation: modalPop .33s cubic-bezier(.5,1.4,.7,1.1);
+    }
+    body.dark .modal-content {
+      background: var(--background-end);
+      color: var(--text-color);
+    }
+    @keyframes modalPop {
+      0% {transform: scale(0.8);}
+      100% {transform: scale(1);}
+    }
+    .modal-close {
+      position: absolute;
+      top: 12px;
+      right: 18px;
+      font-size: 2rem;
+      background: none;
+      border: none;
+      color: var(--lemon-green);
+      cursor: pointer;
+      transition: color 0.2s;
+      z-index: 10;
+    }
+    .modal-close:hover {
+      color: var(--lemon-dark);
+    }
+    #auth-form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.8em;
+    }
+    #auth-form input {
+      padding: 14px 16px;
+      border-radius: 11px;
+      border: 1.5px solid #d7e16a;
+      width: 95%;
+      font-size: 1.08rem;
+      margin-bottom: 0.6em;
+      margin-top: 0.3em;
+      background: #fbffd0;
+      transition: box-shadow 0.2s;
+      box-shadow: 0 2px 8px rgba(249,248,113,0.07);
+    }
+    body.dark #auth-form input {
+      background: #222;
+      border-color: #b3bc1a;
+      color: #f9f871;
+    }
+    #auth-form .btn-group {
+      display: flex;
+      gap: 0.8em;
+      width: 100%;
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+    }
+    #auth-form .auth-btn {
+      flex: 1;
+      padding: 12px 0;
+      border-radius: 14px;
+      background: linear-gradient(90deg, var(--lemon-green), var(--lemon-yellow));
+      border: none;
+      color: #fff;
+      font-size: 1.08em;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(137,169,24,0.08);
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s, box-shadow 0.2s, transform 0.2s;
+    }
+    #auth-form .auth-btn:hover {
+      background: linear-gradient(90deg, var(--lemon-yellow), var(--lemon-green));
+      color: var(--lemon-dark);
+      transform: scale(1.05);
+      box-shadow: 0 4px 14px rgba(137,169,24,0.17);
+    }
+    #auth-form .google-btn {
+      margin-top: 0.4em;
+      padding: 12px 0;
+      border-radius: 14px;
+      background: linear-gradient(95deg, #fff, var(--lemon-yellow) 65%);
+      color: #444;
+      font-size: 1.08em;
+      font-weight: 600;
+      border: 2px solid var(--lemon-green);
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(249,248,113,0.07);
+      transition: background 0.3s, color 0.3s, border 0.2s;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8em;
+    }
+    #auth-form .google-btn:hover {
+      background: linear-gradient(95deg, var(--lemon-yellow), #fff 65%);
+      color: var(--lemon-dark);
+      border-color: var(--lemon-yellow);
+    }
+    #auth-form .google-btn .google-icon {
+      width: 22px;
+      height: 22px;
+      vertical-align: middle;
+      display: inline-block;
+    }
+    #lemon-character {
+      margin: 0 auto;
+      font-size: 2.5rem;
+      transition: transform 0.3s cubic-bezier(.7,2,.5,.9);
+      display: block;
+      will-change: transform;
+      pointer-events: none;
+      position: absolute;
+      right: 12px;
+      top: 8px;
+      z-index: 2;
+      opacity: 0.93;
+    }
+    #lemon-character.move {
+      transform: translateX(-18px) rotate(-20deg) scale(1.2);
+    }
+    #auth-status {
+      text-align: center;
+      min-height: 22px;
+      color: #b71c1c;
+      font-weight: 500;
+      font-size: 0.98rem;
+      margin-top: 4px;
+    }
+    body.dark #auth-status {
+      color: #ffd600;
+    }
+    /* Profile modal */
+    #profile-modal-content .profile-info {
+      margin:1.2em 0;
+      font-size: 1.1em;
+      color: var(--lemon-green);
+      font-weight: 700;
+      background: rgba(249,248,113,0.13);
+      padding: 0.9em 0.6em;
+      border-radius: 10px;
+    }
+    body.dark #profile-modal-content .profile-info {
+      background: rgba(179,188,26,0.09);
+      color: var(--lemon-yellow);
+    }
+    #profile-modal-content .profile-actions button {
+      margin: 0.7em 1em 0 1em;
+      padding: 0.5em 1.2em;
+      font-size: 1em;
+      border-radius: 10px;
+      border: none;
+      background: var(--lemon-green);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    body.dark #profile-modal-content .profile-actions button {
+      background: var(--lemon-yellow);
+      color: var(--lemon-dark);
+    }
     main {
       max-width: 1000px;
       margin: 2rem auto;
       padding: 0 1rem;
     }
-
     section {
       background: var(--card-bg);
       border-radius: 16px;
@@ -173,63 +442,52 @@
       transform: translateY(50px);
       transition: all 0.8s ease, background-color 0.5s ease, color 0.5s ease;
     }
-
     section.visible {
       opacity: 1;
       transform: translateY(0);
     }
-
     section img {
       max-width: 300px;
       width: 100%;
       border-radius: 12px;
       transition: transform 0.4s ease, filter 0.3s ease;
     }
-
     section img:hover {
       transform: scale(1.05) rotate(-2deg);
       filter: brightness(1.1);
     }
-
     .text {
       flex: 1;
       min-width: 280px;
       transition: transform 0.3s ease;
     }
-
     .text:hover {
       transform: translateX(5px);
     }
-
     h2 {
       font-size: 2rem;
       margin-bottom: 1rem;
       color: var(--lemon-dark);
       transition: color 0.5s ease;
     }
-
     body.dark h2 {
       color: var(--lemon-yellow);
     }
-
     p {
       font-size: 1.1rem;
       color: #444;
       line-height: 1.7;
       transition: color 0.5s ease;
     }
-
     body.dark p {
       color: #ddd;
     }
-
     .features {
       display: flex;
       flex-wrap: wrap;
       gap: 1.5rem;
       margin-top: 1.5rem;
     }
-
     .feature-card {
       flex: 1 1 250px;
       background: var(--lemon-yellow);
@@ -239,24 +497,20 @@
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
       transition: all 0.3s ease, background-color 0.5s ease, color 0.5s ease;
     }
-
     .feature-card:hover {
       background-color: var(--lemon-green);
       color: white;
       transform: scale(1.05);
     }
-
     body.dark .feature-card {
       background: var(--lemon-dark);
       color: var(--lemon-yellow);
       box-shadow: 0 4px 15px rgba(0,0,0,0.6);
     }
-
     body.dark .feature-card:hover {
       background-color: var(--lemon-green);
       color: white;
     }
-
     footer {
       background-color: var(--lemon-yellow);
       text-align: center;
@@ -266,14 +520,11 @@
       box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
       transition: background-color 0.5s ease, color 0.5s ease;
     }
-
     body.dark footer {
       background-color: var(--lemon-dark);
       color: var(--lemon-yellow);
       box-shadow: 0 -2px 10px rgba(0,0,0,0.6);
     }
-
-    
     .dark-mode-toggle {
       background: none;
       border: 2px solid var(--lemon-dark);
@@ -287,80 +538,71 @@
       margin-left: 1rem;
       user-select: none;
     }
-
     .dark-mode-toggle:hover {
       background-color: var(--lemon-green);
       color: white;
       border-color: var(--lemon-green);
     }
-
     body.dark .dark-mode-toggle {
       border-color: var(--lemon-yellow);
       color: var(--lemon-yellow);
     }
-
     body.dark .dark-mode-toggle:hover {
       background-color: var(--lemon-yellow);
       color: var(--lemon-dark);
       border-color: var(--lemon-yellow);
     }
-
-    /* MOBILE STYLES */
+    @media (max-width: 900px) {
+      nav {
+        gap: 0.8rem;
+        font-size: 0.95rem;
+      }
+    }
     @media (max-width: 768px) {
       nav {
-        position: absolute;
-        top: 70px;
-        right: 0;
-        background-color: var(--lemon-yellow);
-        flex-direction: column;
-        width: 100%;
-        display: none;
-        padding: 1rem;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        z-index: 999;
-        transition: background-color 0.5s ease;
+        display: none !important;
       }
-
-      body.dark nav {
-        background-color: var(--lemon-dark);
-      }
-
-      nav.show {
-        display: flex;
-      }
-
       .hamburger {
-        display: flex;
+        display: flex !important;
       }
-
       header {
         flex-wrap: wrap;
       }
-
       section {
         flex-direction: column;
         padding: 1.5rem 1rem;
       }
-
       section img {
         max-width: 100%;
         height: auto;
       }
-
       h2 {
         font-size: 1.5rem;
       }
-
       p {
         font-size: 1rem;
       }
-
       .feature-card {
         flex: 1 1 100%;
       }
-
       main {
         padding: 0 0.5rem;
+      }
+      .modal-content {
+        min-width: 90vw;
+        max-width: 98vw;
+        padding: 1.3rem 0.7rem 1.1rem 0.7rem;
+      }
+      .mobile-nav {
+        width: 100vw;
+        min-height: 100vh;
+        border-bottom-left-radius: 18px;
+        border-bottom-right-radius: 18px;
+        padding: 88px 0 2.5rem 0;
+      }
+      .mobile-nav .menu-item {
+        font-size: 1.14rem;
+        padding: 1em 2em 1em 2em;
       }
     }
   </style>
@@ -372,20 +614,67 @@
     </div>
     <div style="display:flex; align-items:center;">
       <button class="dark-mode-toggle" id="toggle-dark">🌙</button>
-      <div class="hamburger" onclick="toggleMenu()" aria-label="Toggle menu" role="button" tabindex="0">
+      <div class="hamburger" onclick="toggleMobileMenu()" aria-label="Toggle menu" role="button" tabindex="0">
         <div></div>
         <div></div>
         <div></div>
       </div>
     </div>
     <nav id="nav" aria-label="Primary Navigation">
-      <a href="http://ai.0xlemonz.xyz" target="_blank">lemonz AI</a>
-      <a href="games/index.html">lemonz Games</a>
-      <a href="#features">Features</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
+      <a href="http://ai.0xlemonz.xyz" target="_blank" class="menu-item"><i class="fa-solid fa-robot"></i> lemonz AI</a>
+      <a href="games/index.html" class="menu-item"><i class="fa-solid fa-gamepad"></i> lemonz Games</a>
+      <a href="#features" class="menu-item"><i class="fa-solid fa-bolt"></i> Features</a>
+      <a href="#about" class="menu-item"><i class="fa-solid fa-lemon"></i> About</a>
+      <a href="#contact" class="menu-item"><i class="fa-regular fa-comment-dots"></i> Contact</a>
+      <button id="signup-login-nav" class="menu-item"><i class="fa-solid fa-user-plus"></i> Signup/Login</button>
+      <button id="profile-nav" class="menu-item" style="display:none;"><i class="fa-solid fa-user"></i> Profile</button>
     </nav>
+    <!-- Mobile nav -->
+    <div class="mobile-nav" id="mobile-nav">
+      <button class="close-btn" onclick="toggleMobileMenu()">&times;</button>
+      <a href="http://ai.0xlemonz.xyz" target="_blank" class="menu-item"><i class="fa-solid fa-robot"></i> lemonz AI</a>
+      <a href="games/index.html" class="menu-item"><i class="fa-solid fa-gamepad"></i> lemonz Games</a>
+      <a href="#features" class="menu-item" onclick="toggleMobileMenu()"><i class="fa-solid fa-bolt"></i> Features</a>
+      <a href="#about" class="menu-item" onclick="toggleMobileMenu()"><i class="fa-solid fa-lemon"></i> About</a>
+      <a href="#contact" class="menu-item" onclick="toggleMobileMenu()"><i class="fa-regular fa-comment-dots"></i> Contact</a>
+      <button id="signup-login-nav-mob" class="menu-item"><i class="fa-solid fa-user-plus"></i> Signup/Login</button>
+      <button id="profile-nav-mob" class="menu-item" style="display:none;"><i class="fa-solid fa-user"></i> Profile</button>
+    </div>
   </header>
+
+  <!-- Signup/Login Modal -->
+  <div class="modal" id="auth-modal">
+    <div class="modal-content" id="auth-modal-content">
+      <button class="modal-close" onclick="closeModal('auth-modal')">&times;</button>
+      <form id="auth-form">
+        <h2 style="margin-bottom:0.6rem;">Login / Sign Up</h2>
+        <input type="email" id="email" placeholder="Email" required>
+        <div style="position:relative;width:100%;">
+          <input type="password" id="password" placeholder="Password" required style="width:100%;">
+          <span id="lemon-character" aria-hidden="true">🍋</span>
+        </div>
+        <div class="btn-group">
+          <button type="submit" id="signup-btn" class="auth-btn">Sign Up</button>
+          <button type="button" id="login-btn" class="auth-btn">Login</button>
+        </div>
+        <button type="button" id="google-login" class="google-btn">
+          Sign In with Google 🍋
+        </button>
+        <div id="auth-status"></div>
+      </form>
+    </div>
+  </div>
+  <!-- Profile Modal -->
+  <div class="modal" id="profile-modal">
+    <div class="modal-content" id="profile-modal-content">
+      <button class="modal-close" onclick="closeModal('profile-modal')">&times;</button>
+      <h2>Profile</h2>
+      <div class="profile-info" id="profile-info"></div>
+      <div class="profile-actions">
+        <button onclick="logout()">Logout</button>
+      </div>
+    </div>
+  </div>
 
   <main>
     <section id="intro">
@@ -395,7 +684,6 @@
         <p>Enter a juicy world of innovation and creativity. At 0xLemonz, we mix AI magic with playful gaming in unexpected ways. Explore, enjoy, and experience the power of lemon-powered tech.</p>
       </div>
     </section>
-
     <section id="features">
       <div class="text" style="flex-basis: 100%;">
         <h2>Why Choose Us?</h2>
@@ -407,7 +695,6 @@
         <div class="feature-card">Dark Humor + Fun</div>
       </div>
     </section>
-
     <section id="about">
       <img src="https://images.unsplash.com/photo-1582287014914-1db836ccf0f5?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0" alt="Lemon Tree" />
       <div class="text">
@@ -415,7 +702,6 @@
         <p>We began with a simple idea: what if horror, humor, and AI could live together in a lemon? That idea grew into 0xLemonz—a creative studio for interactive entertainment, tools, and beyond.</p>
       </div>
     </section>
-
     <section id="contact">
       <div class="text" style="flex-basis: 100%;">
         <h2>Contact</h2>
@@ -423,12 +709,151 @@
       </div>
     </section>
   </main>
-
   <footer>
     &copy; 2025 0xLemonz. All rights reserved.
   </footer>
-
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script>
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyAMsPXZJtp3nP3pRh2ctrwZFHBzsoGvEXw",
+      authDomain: "xlemonz-auth.firebaseapp.com",
+      projectId: "xlemonz-auth",
+      storageBucket: "xlemonz-auth.firebasestorage.app",
+      messagingSenderId: "209803054245",
+      appId: "1:209803054245:web:6aae4d016e54520e11d14c"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // Elements
+    const emailEl = document.getElementById('email');
+    const passwordEl = document.getElementById('password');
+    const signupBtn = document.getElementById('signup-btn');
+    const loginBtn = document.getElementById('login-btn');
+    const googleBtn = document.getElementById('google-login');
+    const authStatus = document.getElementById('auth-status');
+    const lemonChar = document.getElementById('lemon-character');
+    const profileBtnDesktop = document.getElementById('profile-nav');
+    const profileBtnMobile = document.getElementById('profile-nav-mob');
+    const signupLoginBtnDesktop = document.getElementById('signup-login-nav');
+    const signupLoginBtnMobile = document.getElementById('signup-login-nav-mob');
+    const profileInfo = document.getElementById('profile-info');
+
+    passwordEl.addEventListener('input', () => {
+      lemonChar.classList.add('move');
+      setTimeout(() => lemonChar.classList.remove('move'), 220);
+      if (passwordEl.value.length > 10) {
+        lemonChar.textContent = "😎";
+      } else {
+        lemonChar.textContent = "🍋";
+      }
+    });
+    // Signup
+    signupBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      auth.createUserWithEmailAndPassword(emailEl.value, passwordEl.value)
+        .then(user => {
+          authStatus.innerText = `Welcome, ${user.user.email}!`;
+        })
+        .catch(err => {
+          authStatus.innerText = `❌ ${err.message}`;
+        });
+    });
+    // Login
+    loginBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      auth.signInWithEmailAndPassword(emailEl.value, passwordEl.value)
+        .then(user => {
+          authStatus.innerText = `Logged in as ${user.user.email}`;
+        })
+        .catch(err => {
+          authStatus.innerText = `❌ ${err.message}`;
+        });
+    });
+    // Google sign-in
+    googleBtn.addEventListener('click', () => {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider)
+        .then(result => {
+          authStatus.innerText = `Signed in as ${result.user.displayName}`;
+        })
+        .catch(err => {
+          authStatus.innerText = `❌ ${err.message}`;
+        });
+    });
+    // Auth state listener & profile show
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        profileBtnDesktop.style.display = "inline-block";
+        profileBtnMobile.style.display = "inline-block";
+        profileInfo.innerHTML = `<span>🍋 ${user.email || user.displayName}</span>`;
+      } else {
+        profileBtnDesktop.style.display = "none";
+        profileBtnMobile.style.display = "none";
+        profileInfo.innerHTML = "";
+      }
+    });
+    // Profile logout
+    function logout() {
+      auth.signOut().then(() => {
+        closeModal('profile-modal');
+        setTimeout(() => location.reload(), 350);
+      });
+    }
+
+    // MODAL logic
+    function openModal(id) {
+      document.getElementById(id).classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // DESKTOP NAVBAR logic
+    signupLoginBtnDesktop.onclick = () => {
+      openModal('auth-modal');
+    };
+    profileBtnDesktop.onclick = () => {
+      openModal('profile-modal');
+    };
+
+    // MOBILE NAV logic
+    signupLoginBtnMobile.onclick = () => {
+      openModal('auth-modal');
+      toggleMobileMenu();
+    };
+    profileBtnMobile.onclick = () => {
+      openModal('profile-modal');
+      toggleMobileMenu();
+    };
+
+    // Hamburger/Sidebar menu logic
+    function toggleMobileMenu() {
+      const nav = document.getElementById("mobile-nav");
+      nav.classList.toggle("show");
+      if (nav.classList.contains("show")) {
+        document.body.style.overflow = "hidden";
+      } else {
+        document.body.style.overflow = "";
+      }
+    }
+    // Close mobile menu if clicking outside
+    document.addEventListener('click', (e) => {
+      const nav = document.getElementById("mobile-nav");
+      const hamburger = document.querySelector('.hamburger');
+      if(document.querySelector('.modal.active') && document.querySelector('.modal.active').contains(e.target)) return;
+      if (!nav.contains(e.target) && !hamburger.contains(e.target) && nav.classList.contains("show")) {
+        nav.classList.remove("show");
+        document.body.style.overflow = "";
+      }
+    });
+
+    // Reveal sections on scroll
     const sections = document.querySelectorAll('section');
     const revealOnScroll = () => {
       const trigger = window.innerHeight * 0.85;
@@ -442,21 +867,6 @@
     window.addEventListener('scroll', revealOnScroll);
     window.addEventListener('load', revealOnScroll);
 
-    // Toggle mobile menu with proper toggle on Android
-    function toggleMenu() {
-      const nav = document.getElementById("nav");
-      nav.classList.toggle("show");
-    }
-
-    // Close menu if clicking outside nav (for better UX on mobile)
-    document.addEventListener('click', (e) => {
-      const nav = document.getElementById("nav");
-      const hamburger = document.querySelector('.hamburger');
-      if (!nav.contains(e.target) && !hamburger.contains(e.target)) {
-        nav.classList.remove('show');
-      }
-    });
-
     // Audio autoplay & loop
     window.addEventListener('load', () => {
       const audio = new Audio('daisy bell.mp3');
@@ -469,17 +879,13 @@
       };
       playAudio();
     });
-
     // Dark mode toggle
     const toggleBtn = document.getElementById('toggle-dark');
     const body = document.body;
-
-    // Load saved mode from localStorage
     if (localStorage.getItem('dark-mode') === 'enabled') {
       body.classList.add('dark');
       toggleBtn.textContent = '☀️';
     }
-
     toggleBtn.addEventListener('click', () => {
       body.classList.toggle('dark');
       if (body.classList.contains('dark')) {
@@ -489,6 +895,22 @@
         localStorage.setItem('dark-mode', 'disabled');
         toggleBtn.textContent = '🌙'; 
       }
+    });
+
+    
+    document.querySelectorAll('.menu-item').forEach(item=>{
+      item.addEventListener('mousedown',function(){
+        item.classList.add('active');
+      });
+      item.addEventListener('mouseup',function(){
+        setTimeout(()=>item.classList.remove('active'),300);
+      });
+      item.addEventListener('touchstart',function(){
+        item.classList.add('active');
+      });
+      item.addEventListener('touchend',function(){
+        setTimeout(()=>item.classList.remove('active'),300);
+      });
     });
   </script>
 </body>
