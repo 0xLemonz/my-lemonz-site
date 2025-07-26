@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>lemonz check center</title>
+  <link rel="icon" type="image/png" href="https://i.imgur.com/Luoyr3H.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --main-bg-light: linear-gradient(135deg, #f3f3f3 0%, #e5e5df 100%);
+      --main-bg-dark: linear-gradient(135deg, #16191c 0%, #222427 100%);
+      --box-light: rgba(255,255,255,0.98);
+      --box-dark: rgba(28,32,38,0.98);
+      --txt-light: #181c1c;
+      --txt-dark: #e3e7dd;
+      --accent: #f9a825;
+      --accent2: #ffe082;
+      --shadow: 0 12px 36px 0 #f9a82540, 0 2px 8px #0002;
+      --mono-font: 'Share Tech Mono', 'Consolas', 'Menlo', monospace;
+    }
+    html, body {
+      height: 100%;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      font-family: var(--mono-font);
+      background: var(--main-bg-light);
+      color: var(--txt-light);
+      transition: background 0.7s, color 0.3s;
+      overflow-x: hidden;
+    }
+    body.dark {
+      background: var(--main-bg-dark);
+      color: var(--txt-dark);
+    }
+    .center-container {
+      max-width: 540px;
+      margin: 60px auto 0;
+      padding: 36px 28px 26px 28px;
+      background: var(--box-light);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: background 0.7s, color 0.3s;
+      position: relative;
+      z-index: 2;
+    }
+    body.dark .center-container {
+      background: var(--box-dark);
+      color: var(--txt-dark);
+      box-shadow: 0 10px 36px 0 #f9a82510, 0 2px 8px #0005;
+    }
+    .logo-anim {
+      width: 72px; height: 72px;
+      margin-bottom: 16px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 50%;
+      animation: logo-bounce 2.3s cubic-bezier(.62,.13,.39,.92) infinite alternate;
+      box-shadow: 0 8px 32px #ffe08244;
+      background: transparent;
+      position: relative;
+    }
+    @keyframes logo-bounce {
+      0% { transform: translateY(0) scale(1);}
+      50% { transform: translateY(-10px) scale(1.06);}
+      100% { transform: translateY(0) scale(1);}
+    }
+    .logo-anim img {
+      width: 100%; height: 100%; object-fit: contain;
+      animation: lemon-spin 2.7s linear infinite alternate;
+      filter: drop-shadow(0 0 0 #ffe082);
+      border-radius: 50%;
+    }
+    @keyframes lemon-spin {
+      0% { transform: rotate(-7deg);}
+      100% { transform: rotate(7deg);}
+    }
+    h1 {
+      margin: 0 0 30px 0;
+      font-size: 2.1rem;
+      letter-spacing: 2px;
+      font-family: var(--mono-font);
+      text-align: center;
+      color: var(--accent);
+      text-shadow: 0 2px 18px #ffe08255, 0 1px 0 #fffbe7;
+      animation: fadeInDown 1s cubic-bezier(.36,.07,.19,.97);
+      font-weight: 700;
+    }
+    @keyframes fadeInDown {
+      0% { opacity: 0; transform: translateY(-24px);}
+      100% { opacity: 1; transform: translateY(0);}
+    }
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      width: 100%;
+      margin-top: 18px;
+    }
+    .option-link {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 16px;
+      background: var(--main-bg-light);
+      color: var(--txt-light);
+      border: none;
+      border-radius: 14px;
+      box-shadow: 0 4px 14px #ffc10721;
+      padding: 22px 24px;
+      font-size: 1.18rem;
+      font-family: var(--mono-font);
+      text-decoration: none;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.45s, box-shadow 0.35s, color 0.3s, transform 0.18s;
+      will-change: transform;
+      outline: none;
+      user-select: none;
+      animation: optionPop 0.7s;
+    }
+    .option-link:focus,
+    .option-link:hover {
+      background: linear-gradient(90deg, #ffe082 70%, #f9a825 100%);
+      color: #18170a;
+      box-shadow: 0 10px 26px #ffd54f44;
+      transform: scale(1.045) translateY(-2px);
+      z-index: 3;
+    }
+    .option-link .icon {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: #fffbe7;
+      display: flex; align-items: center; justify-content: center;
+      margin-right: 10px;
+      font-size: 1.5em;
+      box-shadow: 0 1px 9px #ffe08255;
+      flex-shrink: 0;
+      transition: background 0.35s;
+      border: 2px solid #ffe082;
+    }
+    .option-link:focus .icon,
+    .option-link:hover .icon {
+      background: #fff9e1;
+      border-color: #f9a825;
+    }
+    body.dark .option-link {
+      background: var(--main-bg-dark);
+      color: var(--txt-dark);
+      box-shadow: 0 3px 14px #ffc10720;
+    }
+    body.dark .option-link .icon {
+      background: #23261e;
+      border-color: #cde35c;
+    }
+    body.dark .option-link:focus,
+    body.dark .option-link:hover {
+      background: linear-gradient(90deg, #23261e 60%, #2e2d19 100%);
+      color: #ffe082;
+    }
+    .toggle-theme {
+      position: absolute;
+      top: 22px; right: 22px;
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: #ffe082;
+      color: #c17900;
+      border: none;
+      box-shadow: 0 2px 8px #ffe082aa;
+      font-size: 1.3em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      transition: background 0.3s, color 0.3s;
+      outline: none;
+    }
+    .toggle-theme:focus,
+    .toggle-theme:hover {
+      background: #181c1c;
+      color: #ffe082;
+      outline: none;
+    }
+    body.dark .toggle-theme {
+      background: #181c1c;
+      color: #ffe082;
+    }
+    @keyframes optionPop {
+      from { opacity: 0; transform: translateY(28px) scale(0.96);}
+      to { opacity: 1; transform: translateY(0) scale(1);}
+    }
+    .binary-bg {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      pointer-events: none;
+      opacity: 0.18;
+      z-index: 0;
+      font-family: var(--mono-font);
+      font-size: 2.3rem;
+      color: #f9a825;
+      user-select: none;
+      line-height: 1.07;
+      white-space: pre;
+      background: transparent;
+      right: 0;
+    }
+    body.dark .binary-bg {
+      color: #ffe082;
+      opacity: 0.21;
+    }
+    
+    @media (max-width: 600px) {
+      .center-container { padding: 18px 2vw 12px 2vw; }
+      .logo-anim {width:50px;height:50px;}
+      .logo-anim img {width:48px;height:48px;}
+      h1 {font-size:1.1rem;}
+      .option-link {font-size:1rem; padding:14px 10px;}
+      .option-link .icon {width:30px;height:30px;}
+      .toggle-theme {top:12px;right:10px;width:30px;height:30px;font-size:1em;}
+      .binary-bg { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="binary-bg" aria-hidden="true" id="binaryBg"></div>
+  <div class="center-container">
+    <button class="toggle-theme" id="themeToggle" aria-label="Toggle theme"><span id="themeIcon">🌙</span></button>
+    <div class="logo-anim">
+      <img src="https://i.imgur.com/Luoyr3H.png" alt="lemonz logo" />
+    </div>
+    <h1>lemonz check center</h1>
+    <div class="options-list">
+      <a class="option-link" href="lemonzsitecheck/lemonzsitecheck.html">
+        <span class="icon">🌐</span>
+        lemonz site check
+      </a>
+      <a class="option-link" href="lemonzpasscheck/lemonzpass.html">
+        <span class="icon">🔑</span>
+        lemonz pass check
+      </a>
+      <a class="option-link" href="lemonzcontractcheck/lemonzcontract.html">
+        <span class="icon">📜</span>
+        Lemonz Contract Check
+      </a>
+    </div>
+  </div>
+  <script>
+    
+    function randomBinaryString(length) {
+      let s = '';
+      for (let i = 0; i < length; i++) {
+        s += Math.random() > 0.495 ? '1' : '0';
+      }
+      return s;
+    }
+    function fillBinaryBg() {
+      const bg = document.getElementById('binaryBg');
+      
+      const fontSize = parseFloat(getComputedStyle(bg).fontSize);
+      
+      const charsPerLine = Math.ceil(window.innerWidth / (fontSize * 0.54));
+      const lines = Math.ceil(window.innerHeight / (fontSize * 0.98));
+      let out = '';
+      for (let i = 0; i < lines + 3; i++) {
+        out += randomBinaryString(charsPerLine) + '\n';
+      }
+      bg.textContent = out;
+    }
+    window.addEventListener('resize', fillBinaryBg);
+    fillBinaryBg();
+    setInterval(fillBinaryBg, 2500);
+
+    
+    function setTheme(dark) {
+      if (dark) {
+        document.body.classList.add('dark');
+        document.getElementById('themeIcon').textContent = "☀️";
+        localStorage.setItem('lemonz-theme', 'dark');
+      } else {
+        document.body.classList.remove('dark');
+        document.getElementById('themeIcon').textContent = "🌙";
+        localStorage.setItem('lemonz-theme', 'light');
+      }
+    }
+    document.getElementById('themeToggle').onclick = function() {
+      setTheme(!document.body.classList.contains('dark'));
+    };
+    
+    if (localStorage.getItem('lemonz-theme') === 'dark' ||
+      (!localStorage.getItem('lemonz-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      setTheme(true);
+    } else {
+      setTheme(false);
+    }
+
+    
+    document.querySelectorAll('.option-link').forEach(link => {
+      link.addEventListener('keypress', function(e){
+        if (e.key === 'Enter' || e.key === ' ') this.click();
+      });
+    });
+  </script>
+</body>
+</html>
