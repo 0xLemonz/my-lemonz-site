@@ -216,7 +216,6 @@
       color: #ffe082;
       opacity: 0.21;
     }
-    
     @media (max-width: 600px) {
       .center-container { padding: 18px 2vw 12px 2vw; }
       .logo-anim {width:50px;height:50px;}
@@ -250,10 +249,13 @@
         <span class="icon">📜</span>
         Lemonz Contract Check
       </a>
+      <a class="option-link" href="abilemonz/abi.html">
+        <span class="icon">🧬</span>
+        Fetch Contract Mint Functions with lemonz
+      </a>
     </div>
   </div>
   <script>
-    
     function randomBinaryString(length) {
       let s = '';
       for (let i = 0; i < length; i++) {
@@ -263,9 +265,7 @@
     }
     function fillBinaryBg() {
       const bg = document.getElementById('binaryBg');
-      
       const fontSize = parseFloat(getComputedStyle(bg).fontSize);
-      
       const charsPerLine = Math.ceil(window.innerWidth / (fontSize * 0.54));
       const lines = Math.ceil(window.innerHeight / (fontSize * 0.98));
       let out = '';
@@ -278,7 +278,6 @@
     fillBinaryBg();
     setInterval(fillBinaryBg, 2500);
 
-    
     function setTheme(dark) {
       if (dark) {
         document.body.classList.add('dark');
@@ -293,15 +292,12 @@
     document.getElementById('themeToggle').onclick = function() {
       setTheme(!document.body.classList.contains('dark'));
     };
-    
     if (localStorage.getItem('lemonz-theme') === 'dark' ||
       (!localStorage.getItem('lemonz-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
       setTheme(true);
     } else {
       setTheme(false);
     }
-
-    
     document.querySelectorAll('.option-link').forEach(link => {
       link.addEventListener('keypress', function(e){
         if (e.key === 'Enter' || e.key === ' ') this.click();
