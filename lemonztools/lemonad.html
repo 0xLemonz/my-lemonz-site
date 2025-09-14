@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=1200">
     <title>Lemonad - Monad Analyzer</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -99,7 +99,6 @@
             const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
             setTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
         });
-
         const updateChartTheme = (theme) => {
             if (!myChart) return;
             const gridColor = (theme === 'dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
@@ -110,7 +109,6 @@
             myChart.options.scales.y.ticks.color = ticksColor;
             myChart.update();
         };
-
         function timeAgo(timestamp) {
             if(timestamp === null) return 'N/A';
             const seconds = Math.floor(Date.now() / 1000) - timestamp;
@@ -121,39 +119,32 @@
             if(seconds < 31536000) return `${Math.floor(seconds / 2592000)}mo ago`;
             return `${Math.floor(seconds / 31536000)}y ago`;
         }
-
         function generateChartLabels() {
             return Array.from({ length: 7 }, (_, i) => {
                 const d = new Date(); d.setDate(d.getDate() - (6 - i));
                 return d.toLocaleDateString('en-US', { weekday: 'short' });
             });
         }
-        
         async function analyzeTransactions() {
             const walletAddress = document.getElementById('walletAddress').value;
             const resultsContainer = document.getElementById('results-container');
             const loader = document.getElementById('loader');
             const button = document.getElementById('analyzeButton');
             const WORKER_URL = 'https://plain-limit-6104.lemonzm7.workers.dev/';
-
             if (!walletAddress.trim()) {
                 resultsContainer.innerHTML = '<p style="color: red; width: 100%; text-align: center;">Please enter a wallet address.</p>';
                 return;
             }
-
             resultsContainer.innerHTML = ''; 
             loader.style.display = 'flex'; 
             button.disabled = true;
-
             if (myChart) myChart.destroy();
-
             try {
                 const response = await fetch(WORKER_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ address: walletAddress })
                 });
-
                 const data = await response.json();
                 if (!response.ok || data.error) throw new Error(data.error || 'Could not fetch data.');
                 
@@ -185,7 +176,6 @@
                     `;
                     return; 
                 }
-
                 resultsContainer.innerHTML = `
                     <div class="results-section">
                         <h2>Overview</h2>
@@ -223,7 +213,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="results-section">
                         <h2 style="animation-delay: 0.7s">Deep Dive</h2>
                         <div class="grid-3">
@@ -249,7 +238,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="results-section">
                         <h2 style="animation-delay: 1.3s">7-Day Activity Chart</h2>
                         <div id="chart-container" class="metric-card" style="animation-delay: 1.4s; padding: 20px;">
@@ -257,16 +245,13 @@
                         </div>
                     </div>
                 `;
-                
                 renderChart(data.dailyTxCounts);
-
             } catch (error) {
                  resultsContainer.innerHTML = `<p style="color: #dc3545; text-align:center; grid-column: 1 / -1;"><b>Error:</b> ${error.message}</p>`;
             } finally {
                 loader.style.display = 'none'; button.disabled = false;
             }
         }
-        
         function renderChart(chartData) {
             if (!document.getElementById('txChart')) return;
             const ctx = document.getElementById('txChart').getContext('2d');
