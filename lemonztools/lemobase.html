@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1200">
+    <title>lemobase - Base Wallet Analyzer</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --purple: #0052FF; --purple-light: #407BFF; --lemon: #F7FF58; --lemon-dark: #e6d700;
+            --bg-color: #f0f2ff; --card-bg-color: rgba(255, 255, 255, 0.95); --text-color: #2c2c2c;
+            --subtle-text-color: #666; --border-color: rgba(0, 0, 0, 0.08); --shadow-color: rgba(0, 82, 255, 0.1);
+        }
+        body[data-theme="dark"] {
+            --bg-color: #121212; --card-bg-color: rgba(26, 26, 26, 0.85); --text-color: #f5f5f5;
+            --subtle-text-color: #a0a0a0; --border-color: rgba(255, 255, 255, 0.1); --shadow-color: rgba(0, 0, 0, 0.2);
+        }
+        @keyframes subtle-gradient-bg {
+            0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; }
+        }
+        @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        *, *::before, *::after { box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh;
+            color: var(--text-color); margin: 0; padding: 40px 20px;
+            background: var(--bg-color);
+            background: radial-gradient(circle, var(--bg-color) 0%, #e8ebff 100%);
+            transition: background-color 0.5s ease;
+        }
+        body[data-theme="dark"] {
+            background: #121212 radial-gradient(circle, #1a1a2e 0%, #16213e 100%);
+        }
+        .theme-switcher { position: absolute; top: 20px; right: 20px; cursor: pointer; width: 50px; height: 26px; background: var(--card-bg-color); border: 1px solid var(--border-color); border-radius: 30px; padding: 3px; z-index: 100; transition: all 0.4s ease; }
+        .theme-switcher-knob { width: 20px; height: 20px; background: var(--purple); border-radius: 50%; transition: transform 0.3s ease; }
+        body[data-theme="dark"] .theme-switcher-knob { transform: translateX(24px); }
+        .container {
+            background: var(--card-bg-color); backdrop-filter: blur(15px); padding: 40px; border-radius: 20px;
+            box-shadow: 0 15px 40px var(--shadow-color);
+            border: 1px solid var(--border-color);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center; width: 100%; max-width: 800px;
+            transition: all 0.4s ease; perspective: 1000px;
+        }
+        .header { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 20px; animation: scaleIn 0.5s ease-out backwards; }
+        .logo { animation: float 6s ease-in-out infinite; transition: transform 0.3s ease; border-radius: 16px; }
+        .logo:hover { transform: scale(1.15) !important; animation-play-state: paused; }
+        .header h1 { 
+            font-weight: 700; font-size: 3rem; margin: 0; 
+            background: linear-gradient(45deg, var(--purple) 30%, var(--lemon-dark) 90%); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+        }
+        .header p { color: var(--subtle-text-color); margin: 0; font-size: 1.1rem; transition: color 0.4s ease; }
+        .input-group { display: flex; gap: 10px; margin-top: 20px; animation: scaleIn 0.5s ease-out 0.1s backwards; }
+        #walletAddress {
+            flex-grow: 1; padding: 15px; border: 1px solid var(--border-color); background-color: rgba(0,0,0,0.02); color: var(--text-color); 
+            border-radius: 8px; font-size: 1rem; transition: all 0.3s;
+        }
+        #walletAddress:focus {
+            outline: none; border-color: var(--purple-light); box-shadow: 0 0 0 4px rgba(0, 82, 255, 0.1);
+        }
+        button { background: var(--purple); color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600; transition: all 0.3s ease; }
+        button:hover:not(:disabled) { background-color: var(--purple-light); transform: translateY(-3px) scale(1.05); box-shadow: 0 8px 20px rgba(0, 82, 255, 0.3); }
+        #results-container { text-align: left; }
+        .results-section { border-top: 1px solid var(--border-color); padding-top: 30px; margin-top: 30px; transition: border-color 0.4s ease; }
+        .results-section h2 { text-align: left; font-size: 1rem; letter-spacing: 1px; margin: 0 0 20px 5px; color: var(--subtle-text-color); text-transform: uppercase; font-weight: 600; transition: color 0.4s ease; animation: scaleIn 0.5s ease-out both; }
+        
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; }
+        .metric-card { 
+            background: var(--card-bg-color); border: 1px solid transparent; padding: 20px; border-radius: 12px; 
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            animation: scaleIn 0.5s ease-out backwards;
+            box-shadow: 0 4px 15px var(--shadow-color);
+        }
+        .metric-card:hover {
+            transform: translateY(-8px) rotateX(5deg);
+            box-shadow: 0 12px 25px var(--shadow-color);
+            border-color: var(--purple);
+        }
+        .metric-card p { margin: 0 0 5px; color: var(--subtle-text-color); font-size: 0.9rem; transition: color 0.4s ease; }
+        .metric-card .value { font-size: 1.7rem; font-weight: 700; color: var(--purple); }
+        .metric-card a { color: var(--purple); text-decoration: none; font-weight: 600; font-size: 0.8rem; }
+        
+        .bouncing-loader { display: none; justify-content: center; align-items: center; margin: 30px auto 0; }
+        .bouncing-loader div { width: 12px; height: 12px; margin: 0 5px; border-radius: 50%; background-color: var(--purple); animation: bounce 0.6s infinite alternate; }
+        .bouncing-loader div:nth-child(2) { animation-delay: 0.2s; background-color: var(--lemon-dark); }
+        .bouncing-loader div:nth-child(3) { animation-delay: 0.4s; }
+        
+        .rank-card { 
+            grid-column: 1 / -1; text-align: center; 
+            background: linear-gradient(135deg, var(--purple) 0%, var(--purple-light) 50%, #2989d8 100%); 
+            background-size: 200% 200%;
+            border: none; color: white; padding: 25px;
+            transition: background-position 0.5s ease;
+        }
+        .rank-card:hover {
+             background-position: 50% 50%;
+        }
+        .rank-card p:first-child { font-size: 1.5rem; color: var(--lemon); text-shadow: 0 0 10px rgba(0,0,0,0.3); }
+        .rank-card .rank-title { color: #fff; font-size: 2.2rem; margin-top: 5px; font-weight: 700; display: block; }
+        .rank-card .rank-description { font-size: 1rem; margin-top: 10px; color: rgba(255,255,255,0.9); max-width: 80%; margin-left: auto; margin-right: auto; }
+        body[data-theme="dark"] .metric-card:hover { border-color: var(--purple-light); }
+    </style>
+</head>
+<body>
+    <div class="theme-switcher" id="themeSwitcher" title="Toggle Theme"><div class="theme-switcher-knob"></div></div>
+    <div class="container">
+        <div class="header">
+            <img src="https://i.imgur.com/RMnxIPY.png" alt="lemobase Logo" width="60" class="logo">
+            <div><h1>lemobase</h1><p>Base Wallet Analyzer</p></div>
+        </div>
+        <div class="input-group">
+             <input type="text" id="walletAddress" placeholder="Enter your wallet address 0x...">
+             <button id="analyzeButton" onclick="analyzeTransactions()">Analyze</button>
+        </div>
+        <div class="bouncing-loader" id="loader">
+            <div></div><div></div><div></div>
+        </div>
+        <div id="results-container"></div>
+    </div>
+
+    <script>
+        let myChart = null;
+        const WORKER_URL = 'https://gentle-mouse-6413.lemonzm7.workers.dev/';
+
+        const themeSwitcher = document.getElementById('themeSwitcher');
+        const setTheme = (theme) => {
+            document.body.setAttribute('data-theme', theme);
+            localStorage.setItem('basewatchTheme', theme);
+            updateChartTheme(theme);
+        };
+        themeSwitcher.addEventListener('click', () => {
+            const currentTheme = document.body.getAttribute('data-theme');
+            setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+        });
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('basewatchTheme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            setTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
+        });
+        const updateChartTheme = (theme) => {
+            if (!myChart) return;
+            const gridColor = (theme === 'dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+            const ticksColor = (theme === 'dark') ? '#a0a0a0' : '#666';
+            myChart.options.scales.x.grid.color = gridColor;
+            myChart.options.scales.y.grid.color = gridColor;
+            myChart.options.scales.x.ticks.color = ticksColor;
+            myChart.options.scales.y.ticks.color = ticksColor;
+            myChart.update();
+        };
+        async function analyzeTransactions() {
+            const walletAddress = document.getElementById('walletAddress').value;
+            const resultsContainer = document.getElementById('results-container');
+            const loader = document.getElementById('loader');
+            const button = document.getElementById('analyzeButton');
+
+            if (!walletAddress.trim()) {
+                resultsContainer.innerHTML = '<p style="color: red; width: 100%; text-align: center;">Please enter a wallet address.</p>';
+                return;
+            }
+             if (!/^0x[a-fA-F0-9]{40}$/.test(walletAddress)) {
+                resultsContainer.innerHTML = '<p style="color: red; width: 100%; text-align: center;">Please enter a valid wallet address.</p>';
+                return;
+            }
+
+            resultsContainer.innerHTML = '';
+            loader.style.display = 'flex';
+            button.disabled = true;
+            if (myChart) myChart.destroy();
+            try {
+                const response = await fetch(WORKER_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ address: walletAddress })
+                });
+                const data = await response.json();
+                if (!response.ok || data.error) throw new Error(data.error || 'Could not fetch data.');
+                
+                resultsContainer.innerHTML = data.html;
+                
+                if (!data.isNewWallet) {
+                   renderChart(data.dailyTxCounts);
+                }
+
+            } catch (error) {
+                 resultsContainer.innerHTML = `<p style="color: #dc3545; text-align:center; grid-column: 1 / -1;"><b>Error:</b> ${error.message}</p>`;
+            } finally {
+                loader.style.display = 'none'; button.disabled = false;
+            }
+        }
+        function generateChartLabels() {
+            return Array.from({ length: 7 }, (_, i) => {
+                const d = new Date(); d.setDate(d.getDate() - (6 - i));
+                return d.toLocaleDateString('en-US', { weekday: 'short' });
+            });
+        }
+        function renderChart(chartData) {
+            if (!document.getElementById('txChart')) return;
+            const ctx = document.getElementById('txChart').getContext('2d');
+            const currentTheme = document.body.getAttribute('data-theme');
+            const gridColor = (currentTheme === 'dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+            const ticksColor = (currentTheme === 'dark') ? '#a0a0a0' : '#666';
+            const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(0, 'rgba(0, 82, 255, 0.7)'); // Blue
+            gradient.addColorStop(1, 'rgba(247, 255, 88, 0.4)'); // Lemon Yellow
+            myChart = new Chart(ctx, { type: 'bar', data: { labels: generateChartLabels(), datasets: [{ label: 'Daily Transactions', data: chartData, backgroundColor: gradient, borderColor: 'var(--purple)', borderWidth: 2, borderRadius: 8, hoverBackgroundColor: 'var(--purple-light)' }] }, options: { scales: { y: { beginAtZero: true, ticks: { precision: 0, color: ticksColor, font: { family: 'Poppins' } }, grid: { color: gridColor } }, x: { ticks: { color: ticksColor, font: { family: 'Poppins' } }, grid: { color: 'transparent' } } }, responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { backgroundColor: '#000', titleFont: { family: 'Poppins' }, bodyFont: { family: 'Poppins' }, padding: 12, cornerRadius: 8, displayColors: false } } } });
+        }
+    </script>
+</body>
+</html>
