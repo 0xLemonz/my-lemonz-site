@@ -8,7 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    
     <style>
         :root {
             --bg-color: #fefce8;
@@ -20,7 +19,6 @@
             --accent-text: #1a1a1a;
             --shadow-color: rgba(145, 107, 0, 0.1);
         }
-
         body.dark-mode {
             --bg-color: #121212;
             --card-bg-color: #1e1e1e;
@@ -31,11 +29,9 @@
             --accent-text: #1a1a1a;
             --shadow-color: rgba(0, 0, 0, 0.25);
         }
-
         html {
             height: 100%;
         }
-
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--bg-color);
@@ -50,7 +46,6 @@
             box-sizing: border-box;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
-
         .header {
             width: 100%;
             max-width: 800px;
@@ -59,7 +54,6 @@
             justify-content: space-between;
             align-items: center;
         }
-
         h1 {
             font-size: 2.5rem;
             font-weight: 700;
@@ -68,11 +62,9 @@
             gap: 15px;
             color: var(--text-primary);
         }
-
         h1 .logo-icon {
             color: var(--accent-color);
         }
-
         .tools-container {
             display: grid;
             grid-template-columns: 1fr;
@@ -80,18 +72,15 @@
             width: 100%;
             max-width: 800px;
         }
-
         @media (min-width: 768px) {
             .tools-container {
                 grid-template-columns: 1fr 1fr;
             }
         }
-        
         @keyframes popIn {
             0% { opacity: 0; transform: scale(0.95); }
             100% { opacity: 1; transform: scale(1); }
         }
-
         .tool-card {
             background-color: var(--card-bg-color);
             border-radius: 16px;
@@ -107,19 +96,19 @@
             animation: popIn 0.6s ease-out forwards;
             opacity: 0;
         }
-        
         .tool-card:nth-child(2) { animation-delay: 0.15s; }
         .tool-card:nth-child(3) { animation-delay: 0.3s; }
         .tool-card:nth-child(4) { animation-delay: 0.45s; }
         .tool-card:nth-child(5) { animation-delay: 0.6s; }
         .tool-card:nth-child(6) { animation-delay: 0.75s; }
         .tool-card:nth-child(7) { animation-delay: 0.9s; }
-        
+        .tool-card:nth-child(8) { animation-delay: 1.05s; }
+        .tool-card:nth-child(9) { animation-delay: 1.2s; }
+        .tool-card:nth-child(10) { animation-delay: 1.35s; }
         .tool-card:hover {
             transform: translateY(-10px);
             box-shadow: 0 12px 30px var(--shadow-color);
         }
-
         .tool-card .icon {
             font-size: 3rem;
             margin-bottom: 20px;
@@ -132,37 +121,31 @@
             border-radius: 50%;
             transition: background-color 0.3s ease;
         }
-
         .tool-card h2 {
             font-size: 1.5rem;
             font-weight: 600;
             margin: 0 0 10px 0;
             color: var(--text-primary);
         }
-
         .tool-card p {
             font-size: 1rem;
             line-height: 1.5;
             color: var(--text-secondary);
             margin: 0;
         }
-        
         .theme-switch-wrapper {
             display: flex;
             align-items: center;
         }
-
         .theme-switch {
             display: inline-block;
             height: 34px;
             position: relative;
             width: 60px;
         }
-
         .theme-switch input {
             display: none;
         }
-
         .slider {
             background-color: #ccc;
             bottom: 0;
@@ -174,7 +157,6 @@
             transition: .4s;
             border-radius: 34px;
         }
-
         .slider:before {
             background-color: white;
             bottom: 4px;
@@ -186,24 +168,19 @@
             width: 26px;
             border-radius: 50%;
         }
-
         input:checked + .slider {
             background-color: var(--accent-color);
         }
-
         input:checked + .slider:before {
             transform: translateX(26px);
         }
-        
         .theme-switch-wrapper i {
              margin: 0 10px;
              color: var(--text-secondary);
         }
-
     </style>
 </head>
 <body>
-
     <header class="header">
         <h1><i class="fa-solid fa-lemon logo-icon"></i>Lemonz Tools</h1>
         <div class="theme-switch-wrapper">
@@ -215,7 +192,6 @@
             <i class="fas fa-moon"></i>
         </div>
     </header>
-
     <main class="tools-container">
         <a href="lemonz Token Price Calculator.html" class="tool-card">
             <div class="icon"><i class="fa-solid fa-magnifying-glass-dollar"></i></div>
@@ -247,19 +223,29 @@
             <h2>Lemonad</h2>
             <p>Monad Wallet Analyzer</p>
         </a>
-        
-        
         <a href="lemobase.html" class="tool-card">
             <div class="icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
             <h2>lemobase</h2>
             <p>Base Wallet Analyzer</p>
         </a>
-        
+        <a href="lecomputerHTML.html" class="tool-card">
+            <div class="icon"><i class="fa-brands fa-html5"></i></div>
+            <h2>LEComputer HTML Preview</h2>
+            <p>Preview and test your HTML code live.</p>
+        </a>
+        <a href="LECOMPUTEROnlineCodeRunner.html" class="tool-card">
+            <div class="icon"><i class="fa-solid fa-terminal"></i></div>
+            <h2>LEComputer Code Runner</h2>
+            <p>Run code online in many programming languages.</p>
+        </a>
+        <a href="lecompouter.html" class="tool-card">
+            <div class="icon"><i class="fa-solid fa-laptop-code"></i></div>
+            <h2>LEComputer Main Tools</h2>
+            <p>Access the main dashboard of coding and engineering tools.</p>
+        </a>
     </main>
-    
     <script>
         const themeToggle = document.getElementById('theme-toggle');
-
         (function() {
             const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
             if (savedTheme === 'dark') {
@@ -270,7 +256,6 @@
                 themeToggle.checked = false;
             }
         })();
-
         themeToggle.addEventListener('change', function() {
             if (this.checked) {
                 document.body.classList.add('dark-mode');
