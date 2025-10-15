@@ -384,7 +384,12 @@
         <option value="weight">Weight</option>
         <option value="temperature">Temperature</option>
       </select>
-      <label for="unitInput">Conversion Expression (e.g. 1024 KB to MB OR TB):</label>
+      <label for="unitInput">Conversion Expression (e.g. 1024 KB to MB OR TB) guide: memory: { "B":1, "KB":1024, "MB":1024*1024, "GB":1024*1024*1024, "TB":1024*1024*1024*1024 }
+length: { "mm":0.001, "cm":0.01, "dm":0.1, "m":1, "km":1000, "in":0.0254, "ft":0.3048, "yd":0.9144, "mi":1609.34 }
+time: { "ms":0.001, "s":1, "min":60, "h":3600, "day":86400 }
+speed: { "m/s":1, "km/h":0.2777778, "mph":0.44704 }
+weight: { "mg":0.000001, "g":0.001, "kg":1, "t":1000, "lb":0.453592, "oz":0.0283495 }
+temperature: { "C":1, "F":1, "K":1 } :</label>
       <input type="text" id="unitInput" placeholder="Example: 1024 KB to MB">
       <button onclick="convertUnit()">Convert</button>
       <pre id="unitResult" class="output">// Converted value</pre>
@@ -820,4 +825,5 @@
     }
   </script>
 </body>
+
 </html>
