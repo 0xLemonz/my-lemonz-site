@@ -193,7 +193,7 @@
 
     <div id="code-runner" class="tab-content">
         <h1>Code Runner</h1>
-        <div class="form-group"><label for="runner-lang">Language:</label><select id="runner-lang"><option value="python3">Python</option><option value="nodejs">JavaScript</option><option value="java">Java</option><option value="golang">Go</option></select></div>
+        <div class="form-group"><label for="runner-lang">Language:</label><select id="runner-lang"><option value="python3">Python</option><option value="nodejs">JavaScript</option><option value="java">Java</option></select></div>
         <div class="form-group"><label>Source Code:</label><div id="editor" style="height: 250px; width: 100%; border-radius: var(--border-radius);"></div></div>
         <button id="runner-run-btn">Execute</button>
         <div class="result-header"><h2>Output</h2><button class="copy-btn" data-target="runner-output">Copy</button></div>
@@ -282,10 +282,9 @@
     editor.renderer.setShowGutter(true);
     editor.setOptions({ fontfamily: "SF Mono, Consolas, Menlo, monospace", fontSize: "1rem" });
 
-
     const runnerLangSelect = document.getElementById('runner-lang');
     runnerLangSelect.addEventListener('change', () => {
-        const langModeMap = { python3: 'python', nodejs: 'javascript', java: 'java', golang: 'golang' };
+        const langModeMap = { python3: 'python', nodejs: 'javascript', java: 'java' };
         editor.session.setMode(`ace/mode/${langModeMap[runnerLangSelect.value]}`);
     });
     
